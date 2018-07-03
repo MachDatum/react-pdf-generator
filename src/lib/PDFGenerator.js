@@ -37,15 +37,21 @@ class PDFGenerator extends React.Component {
     return (
       <div>
         <button onClick={() => this.generatePDF(this.props.dpi, this.props.pageSize)}>Print</button>
-        <div
-          id="print-content"
-          style={{
-            width: 'fit-content',
-            height: 'fit-content'
-          }}>
-          {this.props.children}
+        <div style={{
+          width: '0px',
+          height: '0px',
+          overflow: 'hidden'
+        }} >
+          <div
+            id="print-content"
+            style={{
+              width: 'fit-content',
+              height: 'fit-content'
+            }}>
+            {this.props.children}
+          </div>
         </div>
-      </div>
+      </div >
     );
   };
 

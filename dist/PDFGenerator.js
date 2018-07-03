@@ -6,20 +6,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-import React, { Component } from 'react';
+import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-var dpi = 72;
-var a4 = {
-  width: 8.2677,
-  height: 11.6929
-};
-
-function exportPDF(elementId, fileName, dpi) {
+function exportPDF(elementId, fileName, dpi, pageSize) {
   var html = document.getElementById(elementId);
   var pdf = new jsPDF('p', 'mm', 'a4');
-  var pixelHeight = Math.ceil(dpi * a4.height);
+  var pixelHeight = Math.ceil(dpi * pageSize.height);
   var totalPages = Math.ceil(html.clientHeight / pixelHeight);
 
   var _loop = function _loop() {
@@ -31,7 +25,7 @@ function exportPDF(elementId, fileName, dpi) {
       height: pixelHeight
     }).then(function (canvas) {
       addPage(canvas, pdf, pageCount, totalPages);
-      if (pageCount == totalPages - 1) pdf.save(fileName);
+      if (pageCount === totalPages - 1) pdf.save(fileName);
     });
   };
 
@@ -61,30 +55,42 @@ var PDFGenerator = function (_React$Component) {
   _createClass(PDFGenerator, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return React.createElement(
         'div',
         null,
         React.createElement(
           'button',
-          { onClick: this.generatePDF },
+          { onClick: function onClick() {
+              return _this2.generatePDF(_this2.props.dpi, _this2.props.pageSize);
+            } },
           'Print'
         ),
         React.createElement(
           'div',
-          {
-            id: 'print-content',
-            style: {
-              width: 'fit-content',
-              height: 'fit-content'
+          { style: {
+              width: '0px',
+              height: '0px',
+              overflow: 'hidden'
             } },
-          this.props.children
+          React.createElement(
+            'div',
+            {
+              id: 'print-content',
+              style: {
+                width: 'fit-content',
+                height: 'fit-content'
+              } },
+            this.props.children
+          )
         )
       );
     }
   }, {
     key: 'generatePDF',
-    value: function generatePDF() {
-      exportPDF("print-content", "Report.pdf", dpi);
+    value: function generatePDF(dpi, pageSize) {
+      exportPDF("print-content", "Report.pdf", dpi, pageSize);
     }
   }]);
 
