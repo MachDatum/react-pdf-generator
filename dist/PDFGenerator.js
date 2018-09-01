@@ -12,6 +12,9 @@ import html2canvas from 'html2canvas';
 
 function exportPDF(elementId, fileName, dpi, pageSize) {
   var html = document.getElementById(elementId);
+
+  console.log(html);
+
   var pdf = new jsPDF('p', 'mm', 'a4');
   var pixelHeight = Math.ceil(dpi * pageSize.height);
   var totalPages = Math.ceil(html.clientHeight / pixelHeight);
@@ -36,7 +39,7 @@ function exportPDF(elementId, fileName, dpi, pageSize) {
 
 function addPage(canvas, pdf, pageCount, totalPages) {
   var image = canvas.toDataURL('image/jpeg', 1);
-  pdf.addImage(image, 'JPEG', 0, 0, 210, 297);
+  pdf.addImage(image, 'JPEG', 0, 0);
 
   if (pageCount < totalPages - 1) {
     pdf.addPage();
@@ -63,16 +66,20 @@ var PDFGenerator = function (_React$Component) {
         React.createElement(
           'button',
           { onClick: function onClick() {
-              return _this2.generatePDF(_this2.props.dpi, _this2.props.pageSize);
+              return _this2.generatePDF();
             } },
           'Print'
         ),
         React.createElement(
           'div',
-          { style: {
+          {
+            style: {
               width: '0px',
               height: '0px',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              position: 'fixed',
+              top: '0px',
+              left: '0px'
             } },
           React.createElement(
             'div',
@@ -89,8 +96,8 @@ var PDFGenerator = function (_React$Component) {
     }
   }, {
     key: 'generatePDF',
-    value: function generatePDF(dpi, pageSize) {
-      exportPDF("print-content", "Report.pdf", dpi, pageSize);
+    value: function generatePDF() {
+      exportPDF("print-content", "Report.pdf", this.props.dpi, this.props.pageSize);
     }
   }]);
 

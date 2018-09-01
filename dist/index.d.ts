@@ -1,6 +1,6 @@
 declare module 'react-pdf-generator' {
-    export class PDFGenerator extends React.Component {
-
+    export class PDFGenerator extends React.Component<PDFGeneratorProps> {
+        generatePDF():void;
     }
 
     interface PDFGeneratorProps {
